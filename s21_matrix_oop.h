@@ -29,6 +29,11 @@ class S21Matrix {
         void fill_matrix();
 
         S21Matrix operator+(const S21Matrix &other);
+        S21Matrix operator-(const S21Matrix &other);
+        S21Matrix operator*(const S21Matrix &other);
+        S21Matrix& operator+=(const S21Matrix &other);
+        S21Matrix& operator-=(const S21Matrix &other);
+        S21Matrix& operator*=(const S21Matrix &other); // get set
         S21Matrix operator=(const S21Matrix &other);
         bool operator ==(const S21Matrix &other);
 

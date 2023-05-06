@@ -109,8 +109,8 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
 S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.cols_) {
     if(!(rows_ > 0 && cols_ > 0))
         throw std::logic_error("Copying from the wrong matrix");
-    rows_ = other.rows_;
-    cols_ = other.cols_;
+    // rows_ = other.rows_;
+    // cols_ = other.cols_;
     create_matrix();
     copy_matrix(other);
 }
@@ -203,9 +203,37 @@ bool S21Matrix::operator ==(const S21Matrix &other) {
     return EqMatrix(other);
 }
 
-S21Matrix S21Matrix::operator +(const S21Matrix &other) {
+S21Matrix& S21Matrix::operator +=(const S21Matrix &other) {
     SumMatrix(other);
     return *this;
+}
+
+S21Matrix& S21Matrix::operator -=(const S21Matrix &other) {
+    SubMatrix(other);
+    return *this;
+}
+
+S21Matrix& S21Matrix::operator *=(const S21Matrix &other) {
+    MulMatrix(other);
+    return *this;
+}
+
+S21Matrix S21Matrix::operator +(const S21Matrix &other) {
+    S21Matrix nw(*this);
+    nw.SumMatrix(other);
+    return nw;
+}
+
+S21Matrix S21Matrix::operator -(const S21Matrix &other) {
+    S21Matrix nw(*this);
+    nw.SubMatrix(other);
+    return nw;
+}
+
+S21Matrix S21Matrix::operator *(const S21Matrix &other) {
+    S21Matrix nw(*this);
+    nw.MulMatrix(other);
+    return nw;
 }
 
 S21Matrix S21Matrix::operator =(const S21Matrix &other) {
