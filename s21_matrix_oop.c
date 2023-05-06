@@ -9,16 +9,22 @@ int main() {
     S21Matrix m(a, b);
     m.init();
 
-    // m.Transpose();
-    // m.debug();
-    std::cout << std::endl;
-    std::cin >> a;
-    std::cin >> b;
-    S21Matrix n(a, b);
-    n.init();
-    m.MulMatrix(n);
+    std::cout << m.Determinant() << std::endl;
 
-    m.debug();
+    //S21Matrix zz = m.get_minor_matrix(m, 1, 1);
+
+    //zz.debug();
+
+    // // m.Transpose();
+    // // m.debug();
+    // std::cout << std::endl;
+    // std::cin >> a;
+    // std::cin >> b;
+    // S21Matrix n(a, b);
+    // n.init();
+    // m.MulMatrix(n);
+
+    // m.debug();
 
     return 0;
 }
@@ -197,6 +203,46 @@ S21Matrix S21Matrix::Transpose() {
     }
     *this = temp;
     return *this;
+}
+
+S21Matrix S21Matrix::get_minor_matrix(const S21Matrix &other, int oi, int oz) {
+    S21Matrix nw(other.rows_ - 1, other.cols_ - 1);
+    int x = 0, y = 0;
+    for(int i = 0; i < other.rows_; i++) {
+        x = 0;
+        for(int z = 0; z < other.cols_; z++) {
+            if(z != oz && i != oi) {
+               //std::cout << "Check " << other.matrix_[i][z] << "y=" << y << " x=" << x << std::endl;
+                nw.matrix_[y][x++] = other.matrix_[i][z];
+            }
+        }
+        if(i != oi)
+            y++;
+    }
+    return nw;
+}
+
+double S21Matrix::Determinant() {
+    double res = 0;
+    if(rows_ != cols_)
+        throw std::logic_error("Calculation of the determinant of a non-square matrix");
+    if(this->rows_ == 1) {
+        res = this->matrix_[0][0];
+    }
+    else if(this->rows_ == 2) {
+        res = (this->matrix_[0][0] * this->matrix_[1][1]) - (this->matrix_[1][0] * this->matrix_[0][1]);
+    }
+    else {
+        for(int i = 0; i < cols_; i++) {
+            S21Matrix nw = get_minor_matrix(*this, 0, i);
+            // std::cout << "DEBUG" << std::endl;
+            // nw.debug();
+            // std::cout << std::endl;
+            res += pow(-1, i) * matrix_[0][i] * nw.Determinant();
+            // std::cout << "CHeck res " << res << std::endl;
+        }
+    }
+    return res;
 }
 
 bool S21Matrix::operator ==(const S21Matrix &other) {

@@ -27,6 +27,7 @@ class S21Matrix {
         bool is_correct_matrix() const;
         bool is_suitable_matrix(const S21Matrix &other);
         void fill_matrix();
+        S21Matrix get_minor_matrix(const S21Matrix &other, int oi, int oz);
 
         S21Matrix operator+(const S21Matrix &other);
         S21Matrix operator-(const S21Matrix &other);
