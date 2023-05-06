@@ -8,8 +8,9 @@ int main() {
     std::cout << std::endl;
     S21Matrix m(a, b);
     m.init();
-
-    std::cout << m.Determinant() << std::endl;
+    S21Matrix x = m.InverseMatrix();
+    x.debug();
+    //std::cout << m.Determinant() << std::endl;
 
     //S21Matrix zz = m.get_minor_matrix(m, 1, 1);
 
@@ -243,6 +244,34 @@ double S21Matrix::Determinant() {
         }
     }
     return res;
+}
+
+S21Matrix S21Matrix::CalcComplements() {
+    if(rows_ != cols_)
+        throw std::logic_error("Calculation of the matrix of algebraic additions in a non-square matrix");
+    S21Matrix nw(rows_, cols_);
+    if(rows_ == 1) {
+        nw.matrix_[0][0] = matrix_[0][0];
+    } else {
+        for(int i = 0; i < nw.rows_; i++) {
+            for(int z = 0; z < nw.cols_; z++) {
+                S21Matrix temp = get_minor_matrix(*this, i, z);
+                nw.matrix_[i][z] = temp.Determinant() * pow(-1, i + z);
+            }
+        }
+    }
+    return nw;
+}
+
+S21Matrix S21Matrix::InverseMatrix() {
+    if(rows_ != cols_ || this->Determinant() == 0)
+        throw std::logic_error("Calculation of the inverse matrix is impossible");
+    double det = Determinant();
+    S21Matrix nw(rows_, cols_);
+    nw = this->CalcComplements();
+    nw.Transpose();
+    nw.MulNumber(1.0 / det);
+    return nw;
 }
 
 bool S21Matrix::operator ==(const S21Matrix &other) {
