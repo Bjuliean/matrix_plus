@@ -27,16 +27,22 @@ class S21Matrix {
         bool is_correct_matrix() const;
         bool is_suitable_matrix(const S21Matrix &other);
         void fill_matrix();
+        void mutator_copy(const S21Matrix &other);
         S21Matrix get_minor_matrix(const S21Matrix &other, int oi, int oz);
 
+        double& operator ()(int i, int j);
         S21Matrix operator+(const S21Matrix &other);
         S21Matrix operator-(const S21Matrix &other);
         S21Matrix operator*(const S21Matrix &other);
         S21Matrix& operator+=(const S21Matrix &other);
         S21Matrix& operator-=(const S21Matrix &other);
         S21Matrix& operator*=(const S21Matrix &other); // get set
-        S21Matrix operator=(const S21Matrix &other);
+        S21Matrix operator=(const S21Matrix &other); // index !!
         bool operator ==(const S21Matrix &other);
+        int GetRows();
+        int GetCols();
+        void SetRows(int rows);
+        void SetCols(int cols);
 
         bool EqMatrix(const S21Matrix& other);
         void SumMatrix(const S21Matrix& other);

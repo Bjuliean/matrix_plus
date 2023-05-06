@@ -8,8 +8,13 @@ int main() {
     std::cout << std::endl;
     S21Matrix m(a, b);
     m.init();
-    S21Matrix x = m.InverseMatrix();
-    x.debug();
+
+    m.SetRows(1);
+    m.SetCols(1);
+    m.debug();
+
+    // S21Matrix x = m.InverseMatrix();
+    // x.debug();
     //std::cout << m.Determinant() << std::endl;
 
     //S21Matrix zz = m.get_minor_matrix(m, 1, 1);
@@ -93,6 +98,17 @@ void S21Matrix::copy_matrix(const S21Matrix &other) {
             for(int z = 0; z < cols_; z++) {
                 matrix_[i][z] = other.matrix_[i][z];
             }
+        }
+    }
+}
+
+void S21Matrix::mutator_copy(const S21Matrix &other) {
+    for(int i = 0; i < rows_; i++) {
+        for(int z = 0; z < cols_; z++) {
+            if(i >= other.rows_ || z >= other.cols_)
+                matrix_[i][z] = 0;
+            else
+                matrix_[i][z] = other.matrix_[i][z];
         }
     }
 }
@@ -272,6 +288,50 @@ S21Matrix S21Matrix::InverseMatrix() {
     nw.Transpose();
     nw.MulNumber(1.0 / det);
     return nw;
+}
+
+int S21Matrix::GetRows() {
+    return rows_;
+}
+
+int S21Matrix::GetCols() {
+    return cols_;
+}
+
+void S21Matrix::SetRows(int rows) {
+    if(rows < 1)
+        throw std::logic_error("Attempt to set an incorrect matrix size");
+    S21Matrix temp(*this);
+    delete_matrix();
+    rows_ = rows;
+    cols_ = temp.cols_;
+    create_matrix();
+    mutator_copy(temp);
+    // for(int i = 0; i < rows_; i++) {
+    //     for(int z = 0; z < cols_; z++) {
+    //         if(i >= temp.rows_ || z >= temp.cols_)
+    //             matrix_[i][z] = 0;
+    //         else
+    //             matrix_[i][z] = temp.matrix_[i][z];
+    //     }
+    // }
+}
+
+void S21Matrix::SetCols(int cols) {
+    if(cols < 1)
+        throw std::logic_error("Attempt to set an incorrect matrix size");
+    S21Matrix temp(*this);
+    delete_matrix();
+    cols_ = cols;
+    rows_ = temp.rows_;
+    create_matrix();
+    mutator_copy(temp);
+}
+
+double& S21Matrix::operator ()(int i, int j) {
+    if(i < 0 || j < 0 || i >= rows_ || j >= cols_)
+        throw std::logic_error("Invalid index");
+    return matrix_[i][j];
 }
 
 bool S21Matrix::operator ==(const S21Matrix &other) {
