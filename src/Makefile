@@ -21,8 +21,9 @@ clean:
 gcov_report: main.cpp s21_matrix_oop.cpp
 	@$(CC) --coverage $^ ${CPPFLAGS} ${CHECKFLAGS} -o main
 	@./main
-	@lcov -t "main" -o main.info -c -d ./
+	@lcov -t "main" -o main.info --no-external -c -d ./
 	@genhtml -o report main.info
+	@open report/index.html
 
 style:
 	python3 ../materials/linters/cpplint.py --extensions=cpp *.cpp *.h
