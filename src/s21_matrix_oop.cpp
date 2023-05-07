@@ -1,83 +1,28 @@
 #include "s21_matrix_oop.h"
 
-// int main() {
-
-//     S21Matrix matrix_a(2, 2);
-//     S21Matrix matrix_b(2, 2);
-//     S21Matrix result(2, 2);
-
-//     matrix_a(0, 0) = 3;
-//     matrix_a(0, 1) = 2;
-//     matrix_a(1, 0) = -6.6;
-//     matrix_a(1, 1) = 0;
-
-//     matrix_b(0, 0) = -7;
-//     matrix_b(0, 1) = 0;
-//     matrix_b(1, 0) = -3.5;
-//     matrix_b(1, 1) = 2;
-
-//     result(0, 0) = -28;
-//     result(0, 1) = 4;
-//     result(1, 0) = 46.2;
-//     result(1, 1) = 0;
-
-//     matrix_a *= matrix_b;
-//     matrix_a.debug();
-
-//     if(matrix_a.EqMatrix(result) == true)
-//         std::cout << "DSASDA";
-
-//     // int a, b;
-//     // std::cin >> a;
-//     // std::cin >> b;
-//     // std::cout << std::endl;
-//     // S21Matrix m(a, b);
-//     // m.init();
-
-//     // // m.SetRows(1);
-//     // // m.SetCols(1);
-//     // // m.debug();
-
-//     // S21Matrix x = m.InverseMatrix();
-//     // x.debug();
-//     //std::cout << m.Determinant() << std::endl;
-
-//     //S21Matrix zz = m.get_minor_matrix(m, 1, 1);
-
-//     //zz.debug();
-
-//     // // m.Transpose();
-//     // // m.debug();
-//     // std::cout << std::endl;
-//     // std::cin >> a;
-//     // std::cin >> b;
-//     // S21Matrix n(a, b);
-//     // n.init();
-//     // m.MulMatrix(n);
-
-//     // m.debug();
+// int main(void) {
 
 //     return 0;
 // }
 
-void S21Matrix::init() {
-    for(int i = 0; i < rows_; i++) {
-        for(int z = 0; z < cols_; z++) {
-            std::cin >> matrix_[i][z];
-        }
-    }
-}
+// void S21Matrix::init() {
+//     for(int i = 0; i < rows_; i++) {
+//         for(int z = 0; z < cols_; z++) {
+//             std::cin >> matrix_[i][z];
+//         }
+//     }
+// }
 
-void S21Matrix::debug() {
-    std::cout << std::endl;
-    for(int i = 0; i < rows_; i++) {
-        for(int z = 0; z < cols_; z++) {
-            std::cout << matrix_[i][z] << ' ';
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-}
+// void S21Matrix::debug() {
+//     std::cout << std::endl;
+//     for(int i = 0; i < rows_; i++) {
+//         for(int z = 0; z < cols_; z++) {
+//             std::cout << matrix_[i][z] << ' ';
+//         }
+//         std::cout << std::endl;
+//     }
+//     std::cout << std::endl;
+// }
 
 void S21Matrix::create_matrix() {
     if(!(rows_ > 0 && cols_ > 0))
@@ -139,10 +84,6 @@ void S21Matrix::mutator_copy(const S21Matrix &other) {
     }
 }
 
-// bool S21Matrix::is_correct_matrix(const S21Matrix &other) {
-//     return is_correct_matrix(matrix) && is_correct_matrix(other);
-// }
-
 S21Matrix::S21Matrix() {
     rows_ = 2;
     cols_ = 2;
@@ -158,8 +99,6 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
 S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.cols_) {
     if(rows_ < 1 || cols_ < 1)
         throw std::logic_error("Copying from the wrong matrix");
-    // rows_ = other.rows_;
-    // cols_ = other.cols_;
     create_matrix();
     copy_matrix(other);
 }
@@ -225,22 +164,14 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
     if(cols_ != other.rows_)
         throw std::logic_error("Multiplication of unsuitable matrices");
     S21Matrix other_copy(other);
-    // std::cout << "1DEBUG!!!" << std::endl;
-    // other_copy.debug();
     other_copy.Transpose();
     S21Matrix temp(rows_, rows_);
-    // std::cout << "DEBUG!!!" << std::endl;
-    // other_copy.debug();
     for(int i = 0; i < rows_; i++) {
         for(int j = 0; j < rows_; j++) {
             for(int k = 0; k < cols_; k++) {
-                //std::cout << matrix_[i][k] << "*" << other_copy.matrix_[j][k] << "+";
-                //std::cout << "(" << temp.matrix_[i][j] << ")" << matrix_[i][k] << "*" << other_copy.matrix_[j][k] << "=" << matrix_[i][k] * other_copy.matrix_[j][k] << " + ";
                 temp.matrix_[i][j] += matrix_[i][k] * other_copy.matrix_[j][k];
             }
-            //std::cout << "\t";
         }
-        //std::cout << std::endl;
     }
     *this = temp;
 }
@@ -263,7 +194,6 @@ S21Matrix S21Matrix::get_minor_matrix(const S21Matrix &other, int oi, int oz) {
         x = 0;
         for(int z = 0; z < other.cols_; z++) {
             if(z != oz && i != oi) {
-               //std::cout << "Check " << other.matrix_[i][z] << "y=" << y << " x=" << x << std::endl;
                 nw.matrix_[y][x++] = other.matrix_[i][z];
             }
         }
@@ -286,11 +216,7 @@ double S21Matrix::Determinant() {
     else {
         for(int i = 0; i < cols_; i++) {
             S21Matrix nw = get_minor_matrix(*this, 0, i);
-            // std::cout << "DEBUG" << std::endl;
-            // nw.debug();
-            // std::cout << std::endl;
             res += pow(-1, i) * matrix_[0][i] * nw.Determinant();
-            // std::cout << "CHeck res " << res << std::endl;
         }
     }
     return res;
@@ -341,14 +267,6 @@ void S21Matrix::SetRows(int rows) {
     cols_ = temp.cols_;
     create_matrix();
     mutator_copy(temp);
-    // for(int i = 0; i < rows_; i++) {
-    //     for(int z = 0; z < cols_; z++) {
-    //         if(i >= temp.rows_ || z >= temp.cols_)
-    //             matrix_[i][z] = 0;
-    //         else
-    //             matrix_[i][z] = temp.matrix_[i][z];
-    //     }
-    // }
 }
 
 void S21Matrix::SetCols(int cols) {
@@ -414,6 +332,10 @@ S21Matrix S21Matrix::operator *(const double num) {
     S21Matrix nw(*this);
     nw.MulNumber(num);
     return nw;
+}
+
+S21Matrix operator*(double num, S21Matrix& matrix) {
+    return matrix * num;
 }
 
 S21Matrix S21Matrix::operator =(const S21Matrix &other) {

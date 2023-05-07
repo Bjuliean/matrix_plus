@@ -10,19 +10,17 @@ class S21Matrix {
         double **matrix_;
 
         void create_matrix();
-        void delete_matrix();
-        // bool is_correct_matrix(const S21Matrix &other);        
+        void delete_matrix();   
 
     public:
         S21Matrix();
         ~S21Matrix();
-        //S21Matrix(int n);
         S21Matrix(int rows, int cols);
         S21Matrix(const S21Matrix& other);
         S21Matrix(S21Matrix&& other);
 
-        void init();
-        void debug();
+        // void init();
+        // void debug();
         void copy_matrix(const S21Matrix &other);
         bool is_correct_matrix() const;
         bool is_suitable_matrix(const S21Matrix &other);
@@ -35,11 +33,12 @@ class S21Matrix {
         S21Matrix operator-(const S21Matrix &other);
         S21Matrix operator*(const S21Matrix &other);
         S21Matrix operator*(const double num);
+        friend S21Matrix operator*(double num, S21Matrix& matrix);
         S21Matrix& operator+=(const S21Matrix &other);
         S21Matrix& operator-=(const S21Matrix &other);
         S21Matrix& operator*=(const S21Matrix &other);
         S21Matrix& operator*=(const double num);
-        S21Matrix operator=(const S21Matrix &other); // index !!
+        S21Matrix operator=(const S21Matrix &other);
         bool operator ==(const S21Matrix &other);
         int GetRows();
         int GetCols();
