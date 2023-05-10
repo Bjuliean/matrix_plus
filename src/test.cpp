@@ -390,6 +390,110 @@ TEST(OperatorMulMatrix, False) {
 
     EXPECT_THROW(matrix_a *= matrix_b, std::logic_error);
 }
+
+TEST(MulMatrixOperationTest1, True) {
+  S21Matrix matrix_1 = S21Matrix(2, 2);
+  matrix_1(0, 0) = 1.0;
+  matrix_1(0, 1) = 2.0;
+  matrix_1(1, 0) = 3.0;
+  matrix_1(1, 1) = 4.0;
+
+  S21Matrix matrix_2 = S21Matrix(2, 2);
+  matrix_2(0, 0) = 4.0;
+  matrix_2(0, 1) = 5.6;
+  matrix_2(1, 0) = 6.0;
+  matrix_2(1, 1) = 10.0;
+
+  S21Matrix result = S21Matrix(2, 2);
+  result(0, 0) = 16.0;
+  result(0, 1) = 25.6;
+  result(1, 0) = 36.0;
+  result(1, 1) = 56.8;
+  matrix_1.MulMatrix(matrix_2);
+
+  EXPECT_TRUE(matrix_1 == result);
+}
+
+TEST(MulMatrixOperationTest2, True) {
+  S21Matrix matrix_1 = S21Matrix(3, 2);
+  matrix_1(0, 0) = 1.123456;
+  matrix_1(0, 1) = 4.543564;
+  matrix_1(1, 0) = 2.546356;
+  matrix_1(1, 1) = 5.454325;
+  matrix_1(2, 0) = 3.254562;
+  matrix_1(2, 1) = 6.252452;
+
+  S21Matrix matrix_2 = S21Matrix(2, 3);
+  matrix_2(0, 0) = 1.254352;
+  matrix_2(0, 1) = 6.245223;
+  matrix_2(0, 2) = -1.14245;
+  matrix_2(1, 0) = 2.153252;
+  matrix_2(1, 1) = 3.132411;
+  matrix_2(1, 2) = 4.413214;
+
+  S21Matrix result = S21Matrix(3, 3);
+  result(0, 0) = 11.19264755064;
+  result(0, 1) = 21.248543103492;
+  result(0, 2) = 18.768227947496;
+  result(1, 0) = 14.938562956212;
+  result(1, 1) = 32.987748684963;
+  result(1, 2) = 21.16201903835;
+  result(2, 0) = 17.545471127728;
+  result(2, 1) = 39.910714879098;
+  result(2, 2) = 23.875234343828;
+
+  matrix_1.MulMatrix(matrix_2);
+  EXPECT_TRUE(matrix_1 == result);
+}
+
+TEST(OperatorMulMatrix1, True) {
+  S21Matrix matrix_1 = S21Matrix(2, 2);
+  matrix_1(0, 0) = 1.0;
+  matrix_1(0, 1) = 2.0;
+  matrix_1(1, 0) = 3.0;
+  matrix_1(1, 1) = 4.0;
+
+  S21Matrix matrix_2 = S21Matrix(2, 2);
+  matrix_2(0, 0) = 4.0;
+  matrix_2(0, 1) = 5.6;
+  matrix_2(1, 0) = 6.0;
+  matrix_2(1, 1) = 10.0;
+
+  S21Matrix matrix_3 = matrix_1 * matrix_2;
+
+  S21Matrix result = S21Matrix(2, 2);
+  result(0, 0) = 16.0;
+  result(0, 1) = 25.6;
+  result(1, 0) = 36.0;
+  result(1, 1) = 56.8;
+
+  EXPECT_TRUE(matrix_3 == result);
+}
+
+TEST(OperatorMulMatrix2, True) {
+  S21Matrix matrix_1 = S21Matrix(2, 2);
+  matrix_1(0, 0) = 1.0;
+  matrix_1(0, 1) = 2.0;
+  matrix_1(1, 0) = 3.0;
+  matrix_1(1, 1) = 4.0;
+
+  S21Matrix matrix_2 = S21Matrix(2, 2);
+  matrix_2(0, 0) = 4.0;
+  matrix_2(0, 1) = 5.6;
+  matrix_2(1, 0) = 6.0;
+  matrix_2(1, 1) = 10.0;
+
+  matrix_1 *= matrix_2;
+
+  S21Matrix result = S21Matrix(2, 2);
+  result(0, 0) = 16.0;
+  result(0, 1) = 25.6;
+  result(1, 0) = 36.0;
+  result(1, 1) = 56.8;
+
+  EXPECT_TRUE(matrix_1 == result);
+}
+
 TEST(Transpose, True) {
     S21Matrix matrix_a(4, 3);
     S21Matrix result(3, 4);
@@ -423,7 +527,57 @@ TEST(Transpose, True) {
     ASSERT_TRUE(res == result);
 }
 
-TEST(Inverse, False) {
+TEST(Determinant1, True) {
+  S21Matrix matrix(1, 1);
+  matrix(0, 0) = 234.2312;
+  EXPECT_DOUBLE_EQ(matrix.Determinant(), 234.2312);
+}
+
+TEST(Determinant2, True) {
+  S21Matrix matrix(2, 2);
+  matrix(0, 0) = 1.23;
+  matrix(0, 1) = 2.83;
+  matrix(1, 0) = 3.63;
+  matrix(1, 1) = 4.33;
+  EXPECT_DOUBLE_EQ(matrix.Determinant(), -4.947);
+}
+
+TEST(Determinant3, True) {
+  S21Matrix matrix(3, 3);
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 32.12;
+  matrix(0, 2) = 432.12;
+  matrix(1, 0) = 2.32;
+  matrix(1, 1) = 123.12;
+  matrix(1, 2) = 0.453;
+  matrix(2, 0) = 3.34;
+  matrix(2, 1) = 42.12;
+  matrix(2, 2) = 345.21;
+  EXPECT_DOUBLE_EQ(matrix.Determinant(), -118663.3809096);
+}
+
+TEST(Determinant4, True) {
+  S21Matrix matrix(4, 4);
+  matrix(0, 0) = 1.0;
+  matrix(0, 1) = 5.2;
+  matrix(0, 2) = 2.6;
+  matrix(0, 3) = 7.2;
+  matrix(1, 0) = 1.4;
+  matrix(1, 1) = 5.2;
+  matrix(1, 2) = 7.3;
+  matrix(1, 3) = 3.1;
+  matrix(2, 0) = 6.2;
+  matrix(2, 1) = 5.2;
+  matrix(2, 2) = 6.2;
+  matrix(2, 3) = 2.2;
+  matrix(3, 0) = 2.2;
+  matrix(3, 1) = 6.2;
+  matrix(3, 2) = 0.1;
+  matrix(3, 3) = 5.1;
+  EXPECT_DOUBLE_EQ(matrix.Determinant(), -672.3544);
+}
+
+TEST(Inverse1, False) {
     S21Matrix matrix_a(4, 3);
     S21Matrix result(3, 4);
 
@@ -442,7 +596,7 @@ TEST(Inverse, False) {
 
     EXPECT_THROW(matrix_a.InverseMatrix(), std::logic_error);
 }
-TEST(Inverse, True) {
+TEST(Inverse2, True) {
     S21Matrix matrix_a(3, 3);
     S21Matrix result(3, 3);
 
@@ -481,6 +635,45 @@ TEST(Inverse, True) {
 
     EXPECT_THROW(matrix_b.InverseMatrix(), std::logic_error);
 }
+
+TEST(Inverse3, True) {
+  S21Matrix matrix_1(1, 1);
+  matrix_1(0, 0) = 432.1;
+
+  S21Matrix matrix_2 = matrix_1.InverseMatrix();
+  S21Matrix result(1, 1);
+  result(0, 0) = 0.002314279102;
+
+  EXPECT_TRUE(result == matrix_2);
+}
+
+TEST(Inverse4, True) {
+  S21Matrix matrix_1(3, 3);
+  matrix_1(0, 0) = 2.0;
+  matrix_1(0, 1) = 5.0;
+  matrix_1(0, 2) = 7.0;
+  matrix_1(1, 0) = 6.0;
+  matrix_1(1, 1) = 3.0;
+  matrix_1(1, 2) = 4.0;
+  matrix_1(2, 0) = 5.0;
+  matrix_1(2, 1) = -2.0;
+  matrix_1(2, 2) = -3.0;
+
+  S21Matrix matrix_2 = matrix_1.InverseMatrix();
+  S21Matrix result(3, 3);
+  result(0, 0) = 1.0;
+  result(0, 1) = -1.0;
+  result(0, 2) = 1.0;
+  result(1, 0) = -38.0;
+  result(1, 1) = 41.0;
+  result(1, 2) = -34.0;
+  result(2, 0) = 27.0;
+  result(2, 1) = -29.0;
+  result(2, 2) = 24.0;
+
+  EXPECT_TRUE(result == matrix_2);
+}
+
 TEST(Get, True) {
     S21Matrix matrix_a(3, 3);
 
@@ -547,7 +740,7 @@ TEST(Set, True) {
     ASSERT_TRUE(matrix_b == result_b);
 }
 
-TEST(CalcComplementsOperationTest, 3x3) {
+TEST(CalcComplements, True) {
   S21Matrix matrix_1(3, 3);
   matrix_1(0, 0) = 1.0;
   matrix_1(0, 1) = 2.0;
@@ -574,198 +767,7 @@ TEST(CalcComplementsOperationTest, 3x3) {
   EXPECT_TRUE(result == matrix_2);
 }
 
-TEST(InverseMatrixOperationTest, 1x1) {
-  S21Matrix matrix_1(1, 1);
-  matrix_1(0, 0) = 432.1;
-
-  S21Matrix matrix_2 = matrix_1.InverseMatrix();
-  S21Matrix result(1, 1);
-  result(0, 0) = 0.002314279102;
-
-  EXPECT_TRUE(result == matrix_2);
-}
-
-TEST(InverseMatrixOperationTest, 3x3) {
-  S21Matrix matrix_1(3, 3);
-  matrix_1(0, 0) = 2.0;
-  matrix_1(0, 1) = 5.0;
-  matrix_1(0, 2) = 7.0;
-  matrix_1(1, 0) = 6.0;
-  matrix_1(1, 1) = 3.0;
-  matrix_1(1, 2) = 4.0;
-  matrix_1(2, 0) = 5.0;
-  matrix_1(2, 1) = -2.0;
-  matrix_1(2, 2) = -3.0;
-
-  S21Matrix matrix_2 = matrix_1.InverseMatrix();
-  S21Matrix result(3, 3);
-  result(0, 0) = 1.0;
-  result(0, 1) = -1.0;
-  result(0, 2) = 1.0;
-  result(1, 0) = -38.0;
-  result(1, 1) = 41.0;
-  result(1, 2) = -34.0;
-  result(2, 0) = 27.0;
-  result(2, 1) = -29.0;
-  result(2, 2) = 24.0;
-
-  EXPECT_TRUE(result == matrix_2);
-}
-
-TEST(DeterminantOperationTest, 1x1) {
-  S21Matrix matrix(1, 1);
-  matrix(0, 0) = 234.2312;
-  EXPECT_DOUBLE_EQ(matrix.Determinant(), 234.2312);
-}
-
-TEST(DeterminantOperationTest, 2x2) {
-  S21Matrix matrix(2, 2);
-  matrix(0, 0) = 1.23;
-  matrix(0, 1) = 2.83;
-  matrix(1, 0) = 3.63;
-  matrix(1, 1) = 4.33;
-  EXPECT_DOUBLE_EQ(matrix.Determinant(), -4.947);
-}
-
-TEST(DeterminantOperationTest, 3x3) {
-  S21Matrix matrix(3, 3);
-  matrix(0, 0) = 1.0;
-  matrix(0, 1) = 32.12;
-  matrix(0, 2) = 432.12;
-  matrix(1, 0) = 2.32;
-  matrix(1, 1) = 123.12;
-  matrix(1, 2) = 0.453;
-  matrix(2, 0) = 3.34;
-  matrix(2, 1) = 42.12;
-  matrix(2, 2) = 345.21;
-  EXPECT_DOUBLE_EQ(matrix.Determinant(), -118663.3809096);
-}
-
-TEST(DeterminantOperationTest, 4x4) {
-  S21Matrix matrix(4, 4);
-  matrix(0, 0) = 1.0;
-  matrix(0, 1) = 5.2;
-  matrix(0, 2) = 2.6;
-  matrix(0, 3) = 7.2;
-  matrix(1, 0) = 1.4;
-  matrix(1, 1) = 5.2;
-  matrix(1, 2) = 7.3;
-  matrix(1, 3) = 3.1;
-  matrix(2, 0) = 6.2;
-  matrix(2, 1) = 5.2;
-  matrix(2, 2) = 6.2;
-  matrix(2, 3) = 2.2;
-  matrix(3, 0) = 2.2;
-  matrix(3, 1) = 6.2;
-  matrix(3, 2) = 0.1;
-  matrix(3, 3) = 5.1;
-  EXPECT_DOUBLE_EQ(matrix.Determinant(), -672.3544);
-}
-
-TEST(MulMatrixOperationTest, SameSize) {
-  S21Matrix matrix_1 = S21Matrix(2, 2);
-  matrix_1(0, 0) = 1.0;
-  matrix_1(0, 1) = 2.0;
-  matrix_1(1, 0) = 3.0;
-  matrix_1(1, 1) = 4.0;
-
-  S21Matrix matrix_2 = S21Matrix(2, 2);
-  matrix_2(0, 0) = 4.0;
-  matrix_2(0, 1) = 5.6;
-  matrix_2(1, 0) = 6.0;
-  matrix_2(1, 1) = 10.0;
-
-  S21Matrix result = S21Matrix(2, 2);
-  result(0, 0) = 16.0;
-  result(0, 1) = 25.6;
-  result(1, 0) = 36.0;
-  result(1, 1) = 56.8;
-  matrix_1.MulMatrix(matrix_2);
-
-  EXPECT_TRUE(matrix_1 == result);
-}
-
-TEST(MulMatrixOperationTest, DifferentSize) {
-  S21Matrix matrix_1 = S21Matrix(3, 2);
-  matrix_1(0, 0) = 1.123456;
-  matrix_1(0, 1) = 4.543564;
-  matrix_1(1, 0) = 2.546356;
-  matrix_1(1, 1) = 5.454325;
-  matrix_1(2, 0) = 3.254562;
-  matrix_1(2, 1) = 6.252452;
-
-  S21Matrix matrix_2 = S21Matrix(2, 3);
-  matrix_2(0, 0) = 1.254352;
-  matrix_2(0, 1) = 6.245223;
-  matrix_2(0, 2) = -1.14245;
-  matrix_2(1, 0) = 2.153252;
-  matrix_2(1, 1) = 3.132411;
-  matrix_2(1, 2) = 4.413214;
-
-  S21Matrix result = S21Matrix(3, 3);
-  result(0, 0) = 11.19264755064;
-  result(0, 1) = 21.248543103492;
-  result(0, 2) = 18.768227947496;
-  result(1, 0) = 14.938562956212;
-  result(1, 1) = 32.987748684963;
-  result(1, 2) = 21.16201903835;
-  result(2, 0) = 17.545471127728;
-  result(2, 1) = 39.910714879098;
-  result(2, 2) = 23.875234343828;
-
-  matrix_1.MulMatrix(matrix_2);
-  EXPECT_TRUE(matrix_1 == result);
-}
-
-TEST(MulMatrixOperatorTest, SameSize) {
-  S21Matrix matrix_1 = S21Matrix(2, 2);
-  matrix_1(0, 0) = 1.0;
-  matrix_1(0, 1) = 2.0;
-  matrix_1(1, 0) = 3.0;
-  matrix_1(1, 1) = 4.0;
-
-  S21Matrix matrix_2 = S21Matrix(2, 2);
-  matrix_2(0, 0) = 4.0;
-  matrix_2(0, 1) = 5.6;
-  matrix_2(1, 0) = 6.0;
-  matrix_2(1, 1) = 10.0;
-
-  S21Matrix matrix_3 = matrix_1 * matrix_2;
-
-  S21Matrix result = S21Matrix(2, 2);
-  result(0, 0) = 16.0;
-  result(0, 1) = 25.6;
-  result(1, 0) = 36.0;
-  result(1, 1) = 56.8;
-
-  EXPECT_TRUE(matrix_3 == result);
-}
-
-TEST(MulMatrixAssignOperatorTest, SameSize) {
-  S21Matrix matrix_1 = S21Matrix(2, 2);
-  matrix_1(0, 0) = 1.0;
-  matrix_1(0, 1) = 2.0;
-  matrix_1(1, 0) = 3.0;
-  matrix_1(1, 1) = 4.0;
-
-  S21Matrix matrix_2 = S21Matrix(2, 2);
-  matrix_2(0, 0) = 4.0;
-  matrix_2(0, 1) = 5.6;
-  matrix_2(1, 0) = 6.0;
-  matrix_2(1, 1) = 10.0;
-
-  matrix_1 *= matrix_2;
-
-  S21Matrix result = S21Matrix(2, 2);
-  result(0, 0) = 16.0;
-  result(0, 1) = 25.6;
-  result(1, 0) = 36.0;
-  result(1, 1) = 56.8;
-
-  EXPECT_TRUE(matrix_1 == result);
-}
-
-TEST(MulNumberOperationTest, 2x2) {
+TEST(MulNumberOperationTest, True) {
   S21Matrix matrix = S21Matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -782,7 +784,7 @@ TEST(MulNumberOperationTest, 2x2) {
   EXPECT_TRUE(matrix == result);
 }
 
-TEST(MulMatrixNumberOperatorTest, 2x2) {
+TEST(MulMatrixNumberOperatorTest, True) {
   S21Matrix matrix_1 = S21Matrix(2, 2);
   matrix_1(0, 0) = 1.0;
   matrix_1(0, 1) = 2.0;
@@ -799,7 +801,7 @@ TEST(MulMatrixNumberOperatorTest, 2x2) {
   EXPECT_TRUE(matrix_2 == result);
 }
 
-TEST(MulMatrixNumberAssignOperatorTest, 2x2) {
+TEST(MulMatrixNumberAssignOperatorTest, True) {
   S21Matrix matrix = S21Matrix(2, 2);
   matrix(0, 0) = 1.0;
   matrix(0, 1) = 2.0;
@@ -816,7 +818,7 @@ TEST(MulMatrixNumberAssignOperatorTest, 2x2) {
   EXPECT_TRUE(matrix == result);
 }
 
-TEST(MulNumberMatrixOperatorTest, 2x2) {
+TEST(MulNumberMatrixOperatorTest, True) {
   S21Matrix matrix_1 = S21Matrix(2, 2);
   matrix_1(0, 0) = 1.0;
   matrix_1(0, 1) = 2.0;
@@ -831,6 +833,45 @@ TEST(MulNumberMatrixOperatorTest, 2x2) {
   result(1, 1) = 49.6;
 
   EXPECT_TRUE(matrix_2 == result);
+}
+
+    TEST(Constructor, Default) {
+        S21Matrix test = S21Matrix();
+        EXPECT_TRUE(test.GetRows() == 2);
+        EXPECT_TRUE(test.GetCols() == 2);
+    }
+
+    TEST(Constructor, By2Args) {
+        S21Matrix test = S21Matrix(3, 3);
+        EXPECT_TRUE(test.GetRows() == 3);
+        EXPECT_TRUE(test.GetCols() == 3);
+    }
+
+    TEST(Constructor, Copy) {
+        S21Matrix test = S21Matrix(3, 3);
+        test(0,0) = 1;
+        S21Matrix temp = S21Matrix(test);
+        EXPECT_TRUE(test == temp);
+    }
+
+TEST(ConstructorTest, MoveConstructor) {
+  S21Matrix matrix_1 = S21Matrix(2, 2);
+  matrix_1(0, 0) = 1.0;
+  matrix_1(0, 1) = 2.0;
+  matrix_1(1, 0) = 3.0;
+  matrix_1(1, 1) = 4.0;
+  S21Matrix matrix_2 = matrix_1 * 12.4;
+
+  matrix_1 = S21Matrix(std::move(matrix_2));
+  S21Matrix result = S21Matrix(2, 2);
+  result(0, 0) = 12.4;
+  result(0, 1) = 24.8;
+  result(1, 0) = 37.2;
+  result(1, 1) = 49.6;
+
+  EXPECT_TRUE(matrix_1 == result);
+  EXPECT_EQ(matrix_2.GetCols(), 0);
+  EXPECT_EQ(matrix_2.GetRows(), 0);
 }
 
 int main(int argc, char **argv) {

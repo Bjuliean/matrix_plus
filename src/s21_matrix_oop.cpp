@@ -25,7 +25,7 @@
 // }
 
 void S21Matrix::create_matrix() {
-    if(!(rows_ > 0 && cols_ > 0))
+    if(rows_ < 1 || cols_ < 1)
         throw std::logic_error("Trying to create wrong matrix");
     matrix_ = new double* [rows_];
     for(int i = 0; i < rows_; i++)
@@ -34,12 +34,14 @@ void S21Matrix::create_matrix() {
 }
 
 void S21Matrix::delete_matrix() {
-    if(!is_correct_matrix())
-        throw std::logic_error("Memory free error");
-    for(int i = 0; i < rows_; i++)
-        delete [] matrix_[i];
-    delete [] matrix_;
-    matrix_ = nullptr;
+    if(is_correct_matrix()) {
+        for(int i = 0; i < rows_; i++)
+            delete [] matrix_[i];
+        delete [] matrix_;
+        rows_ = 0;
+        cols_ = 0;
+        matrix_ = nullptr;
+    }
 }
 
 void S21Matrix::fill_matrix() {
@@ -103,12 +105,10 @@ S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.c
     copy_matrix(other);
 }
 
-S21Matrix::S21Matrix(S21Matrix &&other) : rows_(other.rows_), cols_(other.cols_) {
-    if(rows_ < 1 || cols_ < 1)
-        throw std::logic_error("Transfer the wrong matrix");
-    create_matrix();
-    copy_matrix(other);
-    other.delete_matrix();
+S21Matrix::S21Matrix(S21Matrix &&other) : rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
+    other.rows_ = 0;
+    other.cols_ = 0;
+    other.matrix_ = nullptr;
 }
 
 S21Matrix::~S21Matrix() {

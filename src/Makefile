@@ -2,11 +2,11 @@ CC = g++
 CPPFLAGS = -lgtest -std=c++17
 CHECKFLAGS = -Wall -Werror -Wextra
 
-all: s21_matrix_oop.a
+all: test gcov_report
 
 test: 
-	@${CC} main.cpp s21_matrix_oop.cpp ${CHECKFLAGS} ${CPPFLAGS} -o main
-	@./main
+	@${CC} test.cpp s21_matrix_oop.cpp ${CHECKFLAGS} ${CPPFLAGS} -o test
+	@./test
 
 %.o: %.cpp
 	@${CC} -std=c++17 ${CHECKFLAGS} -c $^
@@ -16,13 +16,13 @@ test:
 	@ranlib $@
 
 clean:
-	@/bin/rm -rf *.o *.a main *.gcno *gcda report *.info main *.out
+	@/bin/rm -rf *.o *.a test *.gcno *gcda report *.info test *.out
 
-gcov_report: main.cpp s21_matrix_oop.cpp
-	@$(CC) --coverage $^ ${CPPFLAGS} ${CHECKFLAGS} -o main
-	@./main
-	@lcov -t "main" -o main.info --no-external -c -d ./
-	@genhtml -o report main.info
+gcov_report: test.cpp s21_matrix_oop.cpp
+	@$(CC) --coverage $^ ${CPPFLAGS} ${CHECKFLAGS} -o test
+	@./test
+	@lcov -t "test" -o test.info --no-external -c -d ./
+	@genhtml -o report test.info
 	@open report/index.html
 
 style:
@@ -32,4 +32,7 @@ cppcheck:
 	cppcheck --enable=all --suppress=missingIncludeSystem . *.cpp
 
 leaks: test
-	CK_FORK=no leaks --atExit -- ./main
+	CK_FORK=no leaks --atExit -- ./test
+
+valgrind:
+	valgrind --tool=memcheck --leak-check=full ./test

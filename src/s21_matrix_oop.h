@@ -11,6 +11,11 @@ class S21Matrix {
 
         void create_matrix();
         void delete_matrix();   
+        void copy_matrix(const S21Matrix &other);
+        bool is_suitable_matrix(const S21Matrix &other);
+        void fill_matrix();
+        void mutator_copy(const S21Matrix &other);
+        S21Matrix get_minor_matrix(const S21Matrix &other, int oi, int oz);
 
     public:
         S21Matrix();
@@ -21,13 +26,6 @@ class S21Matrix {
 
         // void init();
         // void debug();
-        void copy_matrix(const S21Matrix &other);
-        bool is_correct_matrix() const;
-        bool is_suitable_matrix(const S21Matrix &other);
-        void fill_matrix();
-        void mutator_copy(const S21Matrix &other);
-        S21Matrix get_minor_matrix(const S21Matrix &other, int oi, int oz);
-
         double& operator ()(int i, int j);
         S21Matrix operator+(const S21Matrix &other);
         S21Matrix operator-(const S21Matrix &other);
@@ -54,6 +52,7 @@ class S21Matrix {
         S21Matrix CalcComplements();
         double Determinant();
         S21Matrix InverseMatrix();
+        bool is_correct_matrix() const;
 };
 
 
