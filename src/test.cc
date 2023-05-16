@@ -258,11 +258,19 @@ TEST(OperatorMultiplyNum, True) {
 
   ASSERT_TRUE((matrix_a * 10.0) == result);
 }
+
 TEST(OperatorEqMatrix, True) {
   S21Matrix matrix_a(3, 3);
   S21Matrix matrix_b(1, 3);
   matrix_a = matrix_b;
   ASSERT_TRUE(matrix_a == matrix_b);
+}
+
+TEST(OperatorEqMatrix, False) {
+  S21Matrix matrix_a(3, 3);
+  S21Matrix matrix_b(3, 3);
+  matrix_b(1, 1) = 5;
+  ASSERT_FALSE(matrix_a == matrix_b);
 }
 
 TEST(OperatorSumMatrix, True) {
@@ -767,6 +775,13 @@ TEST(CalcComplements, True) {
   result(2, 2) = 4.0;
 
   EXPECT_TRUE(result == matrix_2);
+
+  S21Matrix matrix_3;
+  matrix_3.SetRows(1);
+  matrix_3.SetCols(1);
+  matrix_3(0, 0) = 35.5;
+
+  EXPECT_TRUE(matrix_3.CalcComplements() == matrix_3);
 }
 
 TEST(MulNumberOperationTest, True) {
@@ -843,10 +858,12 @@ TEST(Constructor, Default) {
   EXPECT_TRUE(test.GetCols() == 0);
 }
 
-TEST(Constructor, By2Args) {
+TEST(Constructor, ByArgs) {
   S21Matrix test = S21Matrix(3, 3);
+  S21Matrix test2(3);
   EXPECT_TRUE(test.GetRows() == 3);
   EXPECT_TRUE(test.GetCols() == 3);
+  EXPECT_TRUE(test == test2);
 }
 
 TEST(Constructor, Copy) {

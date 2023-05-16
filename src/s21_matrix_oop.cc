@@ -16,8 +16,6 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
 
 S21Matrix::S21Matrix(const S21Matrix &other)
     : rows_(other.rows_), cols_(other.cols_) {
-  if (rows_ < 1 || cols_ < 1)
-    throw std::logic_error("Copying from the wrong matrix");
   CreateMatrix();
   CopyMatrix(other);
 }
@@ -160,13 +158,11 @@ void S21Matrix::MulNumber(const double num) {
 void S21Matrix::MulMatrix(const S21Matrix &other) {
   if (cols_ != other.rows_)
     throw std::logic_error("Multiplication of unsuitable matrices");
-  S21Matrix other_copy(other);
-  other_copy.Transpose();
-  S21Matrix temp(rows_, rows_);
+  S21Matrix temp(rows_, other.cols_);
   for (int i = 0; i < rows_; i++) {
-    for (int j = 0; j < rows_; j++) {
+    for (int z = 0; z < other.cols_; z++) {
       for (int k = 0; k < cols_; k++) {
-        temp.matrix_[i][j] += matrix_[i][k] * other_copy.matrix_[j][k];
+        temp.matrix_[i][z] += matrix_[i][k] * other.matrix_[k][z];
       }
     }
   }
@@ -242,10 +238,9 @@ S21Matrix S21Matrix::InverseMatrix() {
     throw std::logic_error("Calculation of the inverse matrix is impossible");
   double det = Determinant();
   S21Matrix nw(rows_, cols_);
-  if(rows_ == 1) {
+  if (rows_ == 1) {
     nw(0, 0) = 1 / det;
-  }
-  else {
+  } else {
     nw = this->CalcComplements();
     nw.Transpose();
     nw.MulNumber(1.0 / det);
@@ -254,10 +249,10 @@ S21Matrix S21Matrix::InverseMatrix() {
 }
 
 void S21Matrix::CreateMatrix() {
-  if (rows_ < 1 || cols_ < 1)
-    throw std::logic_error("Trying to create wrong matrix");
-  matrix_ = new double *[rows_];
-  for (int i = 0; i < rows_; i++) matrix_[i] = new double[cols_] ();
+  if (rows_ > 0 && cols_ > 0) {
+    matrix_ = new double *[rows_];
+    for (int i = 0; i < rows_; i++) matrix_[i] = new double[cols_]();
+  }
 }
 
 void S21Matrix::DeleteMatrix() {

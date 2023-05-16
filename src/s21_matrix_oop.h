@@ -6,7 +6,7 @@
 
 class S21Matrix {
  public:
-  S21Matrix() : rows_(0), cols_(0), matrix_(nullptr) {};
+  S21Matrix() : rows_(0), cols_(0), matrix_(nullptr){};
   S21Matrix(int rows);
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix &other);
@@ -18,7 +18,9 @@ class S21Matrix {
   S21Matrix operator-(const S21Matrix &other);
   S21Matrix operator*(const S21Matrix &other);
   S21Matrix operator*(const double num);
-  friend S21Matrix operator*(double num, S21Matrix &matrix) { return matrix * num; };
+  friend S21Matrix operator*(double num, S21Matrix &matrix) {
+    return matrix * num;
+  };
   S21Matrix &operator+=(const S21Matrix &other);
   S21Matrix &operator-=(const S21Matrix &other);
   S21Matrix &operator*=(const S21Matrix &other);
@@ -26,7 +28,7 @@ class S21Matrix {
   S21Matrix operator=(const S21Matrix &other);
   bool operator==(const S21Matrix &other) { return EqMatrix(other); }
   bool operator!=(const S21Matrix &other) { return !EqMatrix(other); }
-  
+
   int GetRows() { return rows_; }
   int GetCols() { return cols_; }
   void SetRows(int rows);
@@ -54,7 +56,6 @@ class S21Matrix {
   void MutatorCopy(const S21Matrix &other);
   S21Matrix GetMinorMatrix(const S21Matrix &other, int oi, int oz);
   bool IsCorrectMatrix() const;
-
 };
 
 #endif  // SRC_S21_MATRIX_OOP_H_
