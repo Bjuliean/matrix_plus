@@ -52,7 +52,6 @@ class S21Matrix {
   void DeleteMatrix();
   void CopyMatrix(const S21Matrix &other);
   bool IsSuitableMatrix(const S21Matrix &other);
-  // void FillMatrix();
   void MutatorCopy(const S21Matrix &other);
   S21Matrix GetMinorMatrix(const S21Matrix &other, int oi, int oz);
   bool IsCorrectMatrix() const;
