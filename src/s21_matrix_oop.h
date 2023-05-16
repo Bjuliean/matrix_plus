@@ -1,59 +1,60 @@
 #ifndef SRC_S21_MATRIX_OOP_H_
 #define SRC_S21_MATRIX_OOP_H_
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 class S21Matrix {
-    private:
-        int rows_, cols_;
-        double **matrix_;
+ public:
+  S21Matrix() : rows_(0), cols_(0), matrix_(nullptr) {};
+  S21Matrix(int rows);
+  S21Matrix(int rows, int cols);
+  S21Matrix(const S21Matrix &other);
+  S21Matrix(S21Matrix &&other) noexcept;
+  ~S21Matrix() { DeleteMatrix(); }
 
-        void create_matrix();
-        void delete_matrix();   
-        void copy_matrix(const S21Matrix &other);
-        bool is_suitable_matrix(const S21Matrix &other);
-        void fill_matrix();
-        void mutator_copy(const S21Matrix &other);
-        S21Matrix get_minor_matrix(const S21Matrix &other, int oi, int oz);
+  double &operator()(int i, int j);
+  S21Matrix operator+(const S21Matrix &other);
+  S21Matrix operator-(const S21Matrix &other);
+  S21Matrix operator*(const S21Matrix &other);
+  S21Matrix operator*(const double num);
+  friend S21Matrix operator*(double num, S21Matrix &matrix) { return matrix * num; };
+  S21Matrix &operator+=(const S21Matrix &other);
+  S21Matrix &operator-=(const S21Matrix &other);
+  S21Matrix &operator*=(const S21Matrix &other);
+  S21Matrix &operator*=(const double num);
+  S21Matrix operator=(const S21Matrix &other);
+  bool operator==(const S21Matrix &other) { return EqMatrix(other); }
+  bool operator!=(const S21Matrix &other) { return !EqMatrix(other); }
+  
+  int GetRows() { return rows_; }
+  int GetCols() { return cols_; }
+  void SetRows(int rows);
+  void SetCols(int cols);
 
-    public:
-        S21Matrix();
-        ~S21Matrix();
-        S21Matrix(int rows, int cols);
-        S21Matrix(const S21Matrix& other);
-        S21Matrix(S21Matrix&& other);
+  bool EqMatrix(const S21Matrix &other);
+  void SumMatrix(const S21Matrix &other);
+  void SubMatrix(const S21Matrix &other);
+  void MulNumber(const double num);
+  void MulMatrix(const S21Matrix &other);
+  S21Matrix Transpose();
+  S21Matrix CalcComplements();
+  double Determinant();
+  S21Matrix InverseMatrix();
 
-        // void init();
-        // void debug();
-        double& operator ()(int i, int j);
-        S21Matrix operator+(const S21Matrix &other);
-        S21Matrix operator-(const S21Matrix &other);
-        S21Matrix operator*(const S21Matrix &other);
-        S21Matrix operator*(const double num);
-        friend S21Matrix operator*(double num, S21Matrix& matrix);
-        S21Matrix& operator+=(const S21Matrix &other);
-        S21Matrix& operator-=(const S21Matrix &other);
-        S21Matrix& operator*=(const S21Matrix &other);
-        S21Matrix& operator*=(const double num);
-        S21Matrix operator=(const S21Matrix &other);
-        bool operator ==(const S21Matrix &other);
-        int GetRows();
-        int GetCols();
-        void SetRows(int rows);
-        void SetCols(int cols);
+ private:
+  int rows_, cols_;
+  double **matrix_;
 
-        bool EqMatrix(const S21Matrix& other);
-        void SumMatrix(const S21Matrix& other);
-        void SubMatrix(const S21Matrix& other);
-        void MulNumber(const double num);
-        void MulMatrix(const S21Matrix& other);
-        S21Matrix Transpose();
-        S21Matrix CalcComplements();
-        double Determinant();
-        S21Matrix InverseMatrix();
-        bool is_correct_matrix() const;
+  void CreateMatrix();
+  void DeleteMatrix();
+  void CopyMatrix(const S21Matrix &other);
+  bool IsSuitableMatrix(const S21Matrix &other);
+  // void FillMatrix();
+  void MutatorCopy(const S21Matrix &other);
+  S21Matrix GetMinorMatrix(const S21Matrix &other, int oi, int oz);
+  bool IsCorrectMatrix() const;
+
 };
 
-
-#endif // SRC_S21_MATRIX_OOP_H_
+#endif  // SRC_S21_MATRIX_OOP_H_
